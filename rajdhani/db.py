@@ -52,7 +52,7 @@ def search_trains(
     print(ticket_class, col)
     ans = []
     for val in rows:
-        print(val)
+        # print(val)
         d = {
             "number": val[0],
             "name": val[1],
@@ -66,16 +66,17 @@ def search_trains(
             "duration_m": val[11]
         }
         if ticket_class == "SL" and val[-6] == 1:
+            print("y")
             ans.append(d)
         elif ticket_class == "CC" and val[-1] == 1:
             ans.append(d)
         elif ticket_class == "A1" and val[-3] == 1:
             ans.append(d)
-        else:
+        elif ticket_class == None:
             ans.append(d)
 
     return ans
-search_trains('BCT', 'ADI') 
+print(search_trains('BCT', 'ADI',ticket_class = "A1"))
 def get_schedule(train_number):
     """Returns the schedule of a train.
     """
