@@ -44,7 +44,7 @@ def search_trains(
     """
     # TODO: make a db query to get the matching trains
     # and replace the following dummy implementation
-    col, rows = db_ops.exec_query(f"select * from train where from_station_code like '%{from_station_code}%' and to_station_code like '%{to_station_code}%' and  first_class = '{ticket_class}';")
+    col, rows = db_ops.exec_query(f"select * from train where from_station_code like '%{from_station_code}%' and to_station_code like '%{to_station_code}%'  ;")
     # print(col)
     ans = []
     for val in rows:
