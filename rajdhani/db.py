@@ -57,7 +57,7 @@ def search_trains(
         '%{from_station_code}%' and \
         to_station_code like '%{to_station_code}%'\
                 ;")
-    print(ticket_class, col)
+    print(departure_time, col)
     filter1 = []
     for val in rows:
         # print(val)
@@ -85,6 +85,7 @@ def search_trains(
     if departure_time or arrival_time:
         filter2 = []
         for val in filter1:
+            print("v",val["number"],datetime.strptime(val["departure"], '%H:%M:%S') >slot5, slot5)
             for slot in departure_time:
                 if slot == "slot1" and slot1 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot2>= datetime.strptime(val["departure"], '%H:%M:%S'):
                         filter2.append(val)
@@ -94,22 +95,23 @@ def search_trains(
                         filter2.append(val)
                 if slot == "slot4" and slot4 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot5>= datetime.strptime(val["departure"], '%H:%M:%S'):
                         filter2.append(val)
-                if slot == "slot5" and slot5 >= datetime.strptime(val["departure"], '%H:%M:%S') and slot1<= datetime.strptime(val["departure"], '%H:%M:%S'):
+                if slot == "slot5" and slot5 < datetime.strptime(val["departure"], '%H:%M:%S'):# and slot1<= datetime.strptime(val["departure"], '%H:%M:%S'):
                         filter2.append(val)
             for slot in arrival_time:
-                if slot == "slot1" and slot1 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot2>= datetime.strptime(val["departure"], '%H:%M:%S'):
+                if slot == "slot1" and slot1 <= datetime.strptime(val["arrival"], '%H:%M:%S') and slot2>= datetime.strptime(val["arrival"], '%H:%M:%S'):
                         filter2.append(val)
-                if slot == "slot2" and slot2 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot3>= datetime.strptime(val["departure"], '%H:%M:%S'):
+                if slot == "slot2" and slot2 <= datetime.strptime(val["arrival"], '%H:%M:%S') and slot3>= datetime.strptime(val["arrival"], '%H:%M:%S'):
                         filter2.append(val)
-                if slot == "slot3" and slot3 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot4>= datetime.strptime(val["departure"], '%H:%M:%S'):
+                if slot == "slot3" and slot3 <= datetime.strptime(val["arrival"], '%H:%M:%S') and slot4>= datetime.strptime(val["arrival"], '%H:%M:%S'):
                         filter2.append(val)
-                if slot == "slot4" and slot4 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot5>= datetime.strptime(val["departure"], '%H:%M:%S'):
+                if slot == "slot4" and slot4 <= datetime.strptime(val["arrival"], '%H:%M:%S') and slot5>= datetime.strptime(val["arrival"], '%H:%M:%S'):
                         filter2.append(val)
-                if slot == "slot5" and slot5 >= datetime.strptime(val["departure"], '%H:%M:%S') and slot1<= datetime.strptime(val["departure"], '%H:%M:%S'):
+                if slot == "slot5" and slot5 < datetime.strptime(val["arrival"], '%H:%M:%S'):# and slot1<= datetime.strptime(val["arrival"], '%H:%M:%S'):
                         filter2.append(val)
         return filter2
     return filter1
-print(search_trains('BCT', 'ADI',departure_time = ["slot5"]))
+for i in (search_trains('BCT', 'ADI',arrival_time=["slot1"], ticket_class="1A")):
+    print(i["number"])
 def get_schedule(train_number):
     """Returns the schedule of a train.
     """
