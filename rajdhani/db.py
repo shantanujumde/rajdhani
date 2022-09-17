@@ -20,8 +20,8 @@ def search_stations(q):
     res = (db_ops.exec_query(f"select * from train where from_station_code = '{q}';"))
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
-
-    return res
+    print(res)
+    return {}
 
 def search_trains(
         from_station_code,
