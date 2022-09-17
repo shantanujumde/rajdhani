@@ -17,16 +17,16 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    res = db_ops.exec_query(f"select * from train where from_station_code like '%{q}%';")
+    col, rows = db_ops.exec_query(f"select * from train where from_station_code ='{q.upper()}' or to_station_code = '{q.upper() }';")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
-    # print(res[0])
-    # ans = []
-    # for val in res[-1]:
-    #     print(val)
-    #     d = {"code":val[0], "name":val[1]}
-    #     ans.append(d)
+    print(col, rows)
     ans = []
+    for val in rows:
+        # print(val)
+        d = {"code":val[0], "name":val[1]}
+        ans.append(d)
+   
     return ans
 # {"code": "ADI", "name": "AHMEDABAD JN"},
 from datetime import datetime
@@ -57,10 +57,8 @@ def search_trains(
         '%{from_station_code}%' and \
         to_station_code like '%{to_station_code}%'\
                 ;")
-    print(departure_time, col)
     filter1 = []
     for val in rows:
-        # print(val)
         d = {
             "number": val[0],
             "name": val[1],
@@ -85,7 +83,6 @@ def search_trains(
     if departure_time or arrival_time:
         filter2 = []
         for val in filter1:
-            print("v",val["number"],datetime.strptime(val["departure"], '%H:%M:%S') >slot5, slot5)
             for slot in departure_time:
                 if slot == "slot1" and slot1 <= datetime.strptime(val["departure"], '%H:%M:%S') and slot2>= datetime.strptime(val["departure"], '%H:%M:%S'):
                         filter2.append(val)
@@ -110,8 +107,8 @@ def search_trains(
                         filter2.append(val)
         return filter2
     return filter1
-for i in (search_trains('BCT', 'ADI',arrival_time=["slot1"], ticket_class="1A")):
-    print(i["number"])
+# for i in (search_trains('BCT', 'ADI',arrival_time=["slot1"], ticket_class="1A")):
+#     print(i["number"])
 def get_schedule(train_number):
     """Returns the schedule of a train.
     """
