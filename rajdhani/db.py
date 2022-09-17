@@ -20,9 +20,11 @@ def search_stations(q):
     res = db_ops.exec_query(f"select * from train where from_station_code like '%{q}%';")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
+    print(res[0])
     ans = []
-    for val in res:
-        d = {"code":val[4], "name":val[1]}
+    for val in res[-1]:
+        print(val)
+        d = {"code":val[0], "name":val[1]}
         ans.append(d)
     return ans
 # {"code": "ADI", "name": "AHMEDABAD JN"},
