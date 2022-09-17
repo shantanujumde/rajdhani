@@ -44,11 +44,15 @@ def search_trains(
     """
     # TODO: make a db query to get the matching trains
     # and replace the following dummy implementation
-    col, rows = db_ops.exec_query(f"select * from train where from_station_code like '%{from_station_code}%' and to_station_code like '%{to_station_code}%'  ;")
-    # print(col)
+    col, rows = db_ops.exec_query(f"select * from train \
+        where from_station_code like \
+        '%{from_station_code}%' and \
+        to_station_code like '%{to_station_code}%'\
+                ;")
+    print(ticket_class, col)
     ans = []
     for val in rows:
-        # print(val)
+        print(val)
         d = {
             "number": val[0],
             "name": val[1],
@@ -61,9 +65,17 @@ def search_trains(
             "duration_h": val[10],
             "duration_m": val[11]
         }
-        ans.append(d)
+        if ticket_class == "SL" and val[-6] == 1:
+            ans.append(d)
+        elif ticket_class == "CC" and val[-1] == 1:
+            ans.append(d)
+        elif ticket_class == "A1" and val[-3] == 1:
+            ans.append(d)
+        else:
+            ans.append(d)
+
     return ans
-print(search_trains('SBC', 'MAS'))
+search_trains('BCT', 'ADI') 
 def get_schedule(train_number):
     """Returns the schedule of a train.
     """
