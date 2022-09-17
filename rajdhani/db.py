@@ -70,13 +70,13 @@ def search_trains(
             ans.append(d)
         elif ticket_class == "CC" and val[-1] == 1:
             ans.append(d)
-        elif ticket_class == "A1" and val[-3] == 1:
+        elif ticket_class == "1A" and val[-3] == 1:
             ans.append(d)
         elif ticket_class == None:
             ans.append(d)
 
     return ans
-print(search_trains('BCT', 'ADI',ticket_class = "A1"))
+print(search_trains('BCT', 'ADI',ticket_class = "1A"))
 def get_schedule(train_number):
     """Returns the schedule of a train.
     """
