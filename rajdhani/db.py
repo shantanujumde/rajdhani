@@ -17,16 +17,16 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    col, rows = db_ops.exec_query(f"select * from train where from_station_code ='{q.upper()}' or to_station_code = '{q.upper() }';")
+    col, rows = db_ops.exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
     print(col)
     ans = []
     for val in rows:
         # print(val)
-        d = {"code":q.upper(), "name":val[1]}
+        d = {"code":val[0], "name":val[1]}
         ans.append(d)
-        print(val)
+        # print(val[4],val) 
     return ans
 # {"code": "ADI", "name": "AHMEDABAD JN"},
 from datetime import datetime
