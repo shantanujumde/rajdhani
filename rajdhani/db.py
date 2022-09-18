@@ -20,13 +20,13 @@ def search_stations(q):
     col, rows = db_ops.exec_query(f"select * from train where from_station_code ='{q.upper()}' or to_station_code = '{q.upper() }';")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
-    print(col, rows)
+    print(col)
     ans = []
     for val in rows:
         # print(val)
-        d = {"code":val[0], "name":val[1]}
+        d = {"code":q.upper(), "name":val[1]}
         ans.append(d)
-   
+        print(val)
     return ans
 # {"code": "ADI", "name": "AHMEDABAD JN"},
 from datetime import datetime
