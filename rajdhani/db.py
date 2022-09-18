@@ -20,7 +20,6 @@ def search_stations(q):
     col, rows = db_ops.exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
-    print(col)
     ans = []
     for val in rows:
         # print(val)
@@ -111,9 +110,21 @@ def search_trains(
 #     print(i["number"])
 def get_schedule(train_number):
     """Returns the schedule of a train.
+    {"station_code": "BCT", "station_name": "Mumbai Central", "day": "1.0", "arrival": "None", "departure": "23:25:00"},ß
+    =>['number', 'name', 'type', 'zone', 'from_station_code', 'from_station_name', 'to_station_code', 'to_station_name', 'departure', 
+    'arrival', 'duration_h', 'duration_m', 'distance', 'return_train', 'sleeper', 'third_ac', 'second_ac', 'first_ac', 'first_class', 
+    'chair_car'] 
+    =>['code', 'name', 'zone', 'state', 'address', 'latitude', 'longitude']
     """
-    return placeholders.SCHEDULE
-
+    col, rows = db_ops.exec_query(f"select * from train \
+         where number = '{train_number}'")
+    print(col, rows)
+    sch = []
+    for val in rows:
+        d = {"station_code": val[4], "station_name": val[5], "day": "1.0", "arrival": val[9], "departure": val[8]}
+        sch.append(d)
+    return d
+get_schedule("04601")
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
     """
