@@ -118,17 +118,18 @@ def get_schedule(train_number):
     """
     col, rows = db_ops.exec_query(f"select * from train \
          where number = '{int(train_number)}';")
-    print(col,"\n", rows)
+    # print(col,"\n", rows)
     row = rows[0]
     sch = [
         row[4],
-        row[1],
-        row[-1],
-        row[8]
+        row[5],
+        '1' if 1 in row[14:] else '0',
+        str("-"),
+        row[8][:5]
     ]
     
     return sch
-get_schedule("12028")
+print(get_schedule("12628"))
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
