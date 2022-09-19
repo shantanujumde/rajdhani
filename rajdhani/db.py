@@ -1,13 +1,27 @@
 """
 Module to interact with the database.
 """
-
+import sqlite3
 from . import placeholders
 from . import db_ops
 
 db_ops.ensure_db()
 
+def exec_query(q, commit=False):
+    conn = sqlite3.connect("trains.db")
+    curs = conn.cursor()
 
+    try:
+        curs.execute(q)
+        if commit:
+            conn.commit()
+
+        columns = [c[0] for c in curs.description]
+        rows = curs.fetchall()
+    finally:
+        conn.close()
+
+    return columns, rows
 def search_stations(q):
 
     """Returns the top ten stations matching the given query string.
@@ -17,7 +31,7 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    col, rows = db_ops.exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
+    col, rows = exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
     ans = []
@@ -51,7 +65,7 @@ def search_trains(
 
     # TODO: make a db query to get the matching trains
     # and replace the following dummy implementation
-    col, rows = db_ops.exec_query(f"select * from train \
+    col, rows = exec_query(f"select * from train \
         where from_station_code like \
         '%{from_station_code}%' and \
         to_station_code like '%{to_station_code}%'\
@@ -116,7 +130,7 @@ def get_schedule(train_number):
     'chair_car'] 
     =>['code', 'name', 'zone', 'state', 'address', 'latitude', 'longitude']
     """
-    col, rows = db_ops.exec_query(f"select * from schedule \
+    col, rows = exec_query(f"select * from schedule \
          where train_number = '{int(train_number)}';")
     print((rows))
     sch = []
