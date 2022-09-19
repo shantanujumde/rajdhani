@@ -2,10 +2,17 @@
 Module to interact with the database.
 """
 import sqlite3
+from traceback import print_tb
 from . import placeholders
 from . import db_ops
 
 db_ops.ensure_db()
+from sqlalchemy import create_engine, MetaData, Table,select
+engine = create_engine("sqlite:///trains.db", echo=True)
+meta = MetaData(bind=engine)
+train_table = Table("train", meta, autoload=True)
+station_table = Table("station", meta, autoload=True)
+schedule_table = Table("schedule", meta, autoload=True)
 
 def exec_query(q, commit=False):
     conn = sqlite3.connect("trains.db")
@@ -132,7 +139,16 @@ def get_schedule(train_number):
     """
     col, rows = exec_query(f"select * from schedule \
          where train_number = '{int(train_number)}';")
-    print((rows))
+    s = schedule_table
+    sa = select([ s.c.station_code ,
+    s.c.station_name ,
+    s.c.train_number ,
+    s.c.train_name ,
+    s.c.day ,
+    s.c.arrival ,
+    s.c.departure ]).where(s.c.train_number == int(train_number))
+    rows = (list(sa.execute()))
+    # print((rows[0:10]))
     sch = []
     for row in rows:
         # print(row)
@@ -140,7 +156,7 @@ def get_schedule(train_number):
         sch.append(d)
     
     return sch
-print(get_schedule("12028"))
+(get_schedule("12028"))
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
