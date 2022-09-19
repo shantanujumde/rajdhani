@@ -127,8 +127,10 @@ def get_train_schedule(train_number):
         str("-"),
         row[8][:5]
     ]
+    sch = {"station_code": row[4], "station_name":  row[5], "day": "1", "arrival": "None", "departure":row[8]},
+
     
-    return [sch]
+    return sch
 # print(get_schedule("12028"))
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
