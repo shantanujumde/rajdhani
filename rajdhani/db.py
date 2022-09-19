@@ -129,7 +129,7 @@ def get_train_schedule(train_number):
     ]
     
     return sch
-print(get_schedule("12028"))
+# print(get_schedule("12028"))
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
