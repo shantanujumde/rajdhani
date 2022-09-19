@@ -117,14 +117,19 @@ def get_schedule(train_number):
     =>['code', 'name', 'zone', 'state', 'address', 'latitude', 'longitude']
     """
     col, rows = db_ops.exec_query(f"select * from train \
-         where number = '{train_number}'")
-    print(col, rows)
-    sch = []
-    for val in rows:
-        d = {"station_code": val[4], "station_name": val[5], "day": "1.0", "arrival": val[9], "departure": val[8]}
-        sch.append(d)
-    return d
-get_schedule("04601")
+         where number = '{int(train_number)}';")
+    print(col,"\n", rows)
+    row = rows[0]
+    sch = [
+        row[4],
+        row[1],
+        row[-1],
+        row[8]
+    ]
+    
+    return sch
+get_schedule("12028")
+
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
     """
