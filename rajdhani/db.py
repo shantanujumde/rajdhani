@@ -108,7 +108,7 @@ def search_trains(
     return filter1
 # for i in (search_trains('BCT', 'ADI',arrival_time=["slot1"], ticket_class="1A")):
 #     print(i["number"])
-def get_train_schedule(train_number):
+def get_schedule(train_number):
     """Returns the schedule of a train.
     {"station_code": "BCT", "station_name": "Mumbai Central", "day": "1.0", "arrival": "None", "departure": "23:25:00"},ß
     =>['number', 'name', 'type', 'zone', 'from_station_code', 'from_station_name', 'to_station_code', 'to_station_name', 'departure', 
@@ -131,7 +131,7 @@ def get_train_schedule(train_number):
 
     
     # return sch
-print(get_train_schedule("12028"))
+print(get_schedule("12028"))
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
