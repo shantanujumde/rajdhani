@@ -233,7 +233,18 @@ def get_trips(email):
     print(bookings, trips)
     res = []
     for booking in bookings:
-        d = {'train': '04728', 'class': '3A', 'date': '2022-09-28'}
+        d = {
+            "train_number": booking[1],
+            "train_name": "Lalbagh Exp",
+            "from_station_code": booking[2],
+            "from_station_name": "Bangalore",
+            "to_station_code": booking[1],
+            "to_station_name": "Chennai",
+            "ticket_class": booking[6],
+            "date": booking[7],
+            "passenger_name": booking[4],
+            "passenger_email": booking[5],
+        }
         res.append(d)
-    return [{'train': '04728', 'class': '3A', 'date': '2022-09-28'}]
-print(get_trips("lemetweakit@example.com"))
+    return res
+print(get_trips("evaluator@example.com"))
