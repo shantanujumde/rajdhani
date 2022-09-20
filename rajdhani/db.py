@@ -209,7 +209,7 @@ def get_station_name(code):
     return name[1][0][0]
 
 def get_from_to_station_names(from_station_code, to_station_code):
-    return get_station_name(from_station_code), get_station_name(to_station_code)
+    return [get_station_name(from_station_code), get_station_name(to_station_code)]
 
 
 def get_trips(email):
@@ -235,11 +235,11 @@ def get_trips(email):
     for booking in bookings:
         d = {
             "train_number": booking[1],
-            "train_name": "Lalbagh Exp",
+            "train_name": get_train_name(booking[1]),
             "from_station_code": booking[2],
-            "from_station_name": "Bangalore",
-            "to_station_code": booking[1],
-            "to_station_name": "Chennai",
+            "from_station_name": get_from_to_station_names(booking[2], booking[3])[0],
+            "to_station_code": booking[3],
+            "to_station_name": get_from_to_station_names(booking[2], booking[3])[1],
             "ticket_class": booking[6],
             "date": booking[7],
             "passenger_name": booking[4],
