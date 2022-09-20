@@ -14,7 +14,7 @@ def send_booking_confirmation_email(booking):
     email['Subject'] = 'Your Booking Successful!'
     email['From'] = 'Shantanu Jumde <shantanujumde@rajdhani.pipal.in>'
     email['To'] = f'{booking["passenger_name"]} <{booking["passenger_email"]}>'
-    email.set_content(f"""Dear {booking["passenger_name"]},
+    email.set_content(f"""Dear Passanger,
     Your booking from  {booking["from_station_name"]} to {booking["to_station_name"]}
     is successfull
 
