@@ -217,31 +217,34 @@ def get_trips(email):
     """
     # TODO: make a db query and get the bookings
     # made by user with `email`
-    # query = f"SELECT * FROM booking WHERE passenger_email = '{email}'"
-    # b = booking_table
-    # sa = select([   b.c.id ,
-    #                 b.c.train_number,
-    #                 b.c.from_station_code ,
-    #                 b.c.to_station_code ,
-    #                 b.c.passenger_name ,
-    #                 b.c.passenger_email ,
-    #                 b.c.ticket_class ,
-    #                 b.c.date 
-    #             ]).where(b.c.passenger_email == email)
-    # result = (list(sa.execute()))
-    # trips = db_ops.exec_query(query)
-    # print(result, trips)
-    # res = []
-
-    # for trip in result:
-    #     trip_details = {result[i]: trip[i] for i in range(8) if i != 0}
-    #     from_station_name, to_station_name = get_from_to_station_names(trip_details["from_station_code"], trip_details["to_station_code"])
-    #     train_name = get_train_name(trip_details["train_number"])
-    #     trip_details["train_name"] = train_name
-    #     trip_details["from_station_name"] = from_station_name
-    #     trip_details["to_station_name"] = to_station_name
-    #     res.append(trip_details)
-
-
-    # return res
-get_trips("evaluator@example.com")
+    query = f"SELECT * FROM booking WHERE passenger_email = '{email}'"
+    b = booking_table
+    sa = select([   b.c.id ,
+                    b.c.train_number,
+                    b.c.from_station_code ,
+                    b.c.to_station_code ,
+                    b.c.passenger_name ,
+                    b.c.passenger_email ,
+                    b.c.ticket_class ,
+                    b.c.date 
+                ]).where(b.c.passenger_email == email)
+    bookings = (list(sa.execute()))
+    trips = db_ops.exec_query(query)
+    print(bookings, trips)
+    res = []
+    for booking in bookings:
+        d = {
+            "train_number": booking[1],
+            "train_name": "Lalbagh Exp",
+            "from_station_code": booking[2],
+            "from_station_name": "Bangalore",
+            "to_station_code": booking[1],
+            "to_station_name": "Chennai",
+            "ticket_class": booking[6],
+            "date": booking[7],
+            "passenger_name": booking[4],
+            "passenger_email": booking[5],
+        }
+        res.append(d)
+    return res
+print(get_trips("lemetweakit@example.com"))
