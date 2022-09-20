@@ -169,12 +169,12 @@ def book_ticket(train_number, ticket_class, departure_date,
                 t.c.to_station_name,
                 t.c.name
                 ]).where(t.c.number == int(train_number))
-    station_codes = (list(sa.execute())[0])
-   
+    station_codes = (list(sa.execute()))
+    print("station_codes",station_codes)
     q = (f"INSERT INTO booking \
     ( train_number , passenger_name , passenger_email ,ticket_class ,date,from_station_code , to_station_code ) \
         VALUES \
-    ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}','{station_codes[0]}','{station_codes[1]}')")
+    ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}','{station_codes[0][0]}','{station_codes[0][1]}')")
     conn = sqlite3.connect("trains.db")
     curs = conn.cursor()
 
@@ -184,14 +184,13 @@ def book_ticket(train_number, ticket_class, departure_date,
         rows = curs.fetchall()    
     finally:
         conn.close()
-    print("book ticket",rows)
     d = {
         "train_number":train_number,
-        "train_name": station_codes[-1],
-        "from_station_code": station_codes[0],
-        "from_station_name":station_codes[2],
-        "to_station_code": station_codes[1],
-        "to_station_name": station_codes[3],
+        "train_name": station_codes[0][-1],
+        "from_station_code": station_codes[0][0],
+        "from_station_name":station_codes[0][2],
+        "to_station_code": station_codes[0][1],
+        "to_station_name": station_codes[0][3],
         "ticket_class": ticket_class,
         "date": departure_date,
         "passenger_name": passenger_name,
