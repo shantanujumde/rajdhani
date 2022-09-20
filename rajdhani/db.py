@@ -190,7 +190,7 @@ def book_ticket(train_number, ticket_class, departure_date,
         "passenger_email": "tourist@example.com",
     }
     return placeholders.TRIPS[0]
-book_ticket("12628","3A","2022-12-01","Evalu Ator1","evalu@ator.dev")
+# book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
 def get_trips(email):
     """Returns the bookings made by the user
     """
