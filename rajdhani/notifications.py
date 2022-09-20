@@ -10,7 +10,7 @@ def send_booking_confirmation_email(booking):
     # The smtp configuration is available in the config module
     print(booking)
     sender = 'from@fromdomain.com'
-    receivers = ['to@todomain.com']
+    receivers = [booking["passenger_email"]]
 
     message = """From: From Person <from@fromdomain.com>
                 To: To Person <to@todomain.com>
