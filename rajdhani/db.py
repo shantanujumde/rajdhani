@@ -168,67 +168,67 @@ def exec_insert_query(q, params, commit=False):
     finally:
         conn.close()
     return curs.lastrowid
-# def get_from_and_to_of_train(number):
-#     query = f"SELECT from_station_code, to_station_code FROM train WHERE number = '{number}'"
-#     _, train_info = exec_query(query)
-#     return train_info[0]
-# def get_trip(booking_id):
-#     query = f"SELECT * FROM booking WHERE id = {booking_id}"
-#     booking = exec_query(query)
-#     print("=>>",booking)
-#     return  {'train_number': booking[0],
-#      'ticket_class': booking[6],
-#       'date': booking[-1], 'from_station_code': booking[2],
-#        'to_station_code': booking[3], 'passenger_name': booking[4], 
-#        'passenger_email': booking[5]
-#        }
+def get_from_and_to_of_train(number):
+    query = f"SELECT from_station_code, to_station_code FROM train WHERE number = '{number}'"
+    _, train_info = exec_query(query)
+    return train_info[0]
+def get_trip(booking_id):
+    query = f"SELECT * FROM booking WHERE id = {booking_id}"
+    booking = exec_query(query)
+    print("=>>",booking)
+    return  {'train_number': booking[0],
+     'ticket_class': booking[6],
+      'date': booking[-1], 'from_station_code': booking[2],
+       'to_station_code': booking[3], 'passenger_name': booking[4], 
+       'passenger_email': booking[5]
+       }
 
-# def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
-#     """Book a ticket for passenger
-#     """
-#     from_station_code, to_station_code = get_from_and_to_of_train(train_number)
-#     query = "INSERT INTO booking (train_number, ticket_class, date, passenger_name, passenger_email, from_station_code, to_station_code) VALUES(?, ?, ?, ?, ?, ?, ?)"
-#     params = (train_number, ticket_class, departure_date, passenger_name, passenger_email, from_station_code, to_station_code)
-#     booking_id = exec_insert_query(query, params, True)
-#     booking = get_trip(booking_id)
-#     return booking
-def book_ticket(train_number, ticket_class, departure_date, 
-                passenger_name, passenger_email):
+def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
+    """Book a ticket for passenger
+    """
+    from_station_code, to_station_code = get_from_and_to_of_train(train_number)
+    query = "INSERT INTO booking (train_number, ticket_class, date, passenger_name, passenger_email, from_station_code, to_station_code) VALUES(?, ?, ?, ?, ?, ?, ?)"
+    params = (train_number, ticket_class, departure_date, passenger_name, passenger_email, from_station_code, to_station_code)
+    booking_id = exec_insert_query(query, params, True)
+    booking = get_trip(booking_id)
+    return booking
+# def book_ticket(train_number, ticket_class, departure_date, 
+#                 passenger_name, passenger_email):
     
-    t = train_table
-    sa = select([ t.c.from_station_code ,
-                t.c.to_station_code ,
-                t.c.from_station_name,
-                t.c.to_station_name,
-                t.c.name
-                ]).where(t.c.number == int(train_number))
-    station_codes = (list(sa.execute()))
-    print("station_codes",station_codes)
-    q = (f"INSERT INTO booking \
-    ( train_number , passenger_name , passenger_email ,ticket_class ,date,from_station_code , to_station_code ) \
-        VALUES \
-    ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}','{station_codes[0][0]}','{station_codes[0][1]}')")
-    conn = sqlite3.connect("trains.db")
-    curs = conn.cursor()
+#     t = train_table
+#     sa = select([ t.c.from_station_code ,
+#                 t.c.to_station_code ,
+#                 t.c.from_station_name,
+#                 t.c.to_station_name,
+#                 t.c.name
+#                 ]).where(t.c.number == int(train_number))
+#     station_codes = (list(sa.execute()))
+#     print("station_codes",station_codes)
+#     q = (f"INSERT INTO booking \
+#     ( train_number , passenger_name , passenger_email ,ticket_class ,date,from_station_code , to_station_code ) \
+#         VALUES \
+#     ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}','{station_codes[0][0]}','{station_codes[0][1]}')")
+#     conn = sqlite3.connect("trains.db")
+#     curs = conn.cursor()
 
-    try:
-        curs.execute(q)
-        conn.commit()
-    finally:
-        conn.close()
-    d = {
-        "train_number":train_number,
-        "train_name": station_codes[0][-1],
-        "from_station_code": station_codes[0][0],
-        "from_station_name":station_codes[0][2],
-        "to_station_code": station_codes[0][1],
-        "to_station_name": station_codes[0][3],
-        "ticket_class": ticket_class,
-        "date": departure_date,
-        "passenger_name": passenger_name,
-        "passenger_email": passenger_email,
-    }
-    return d
+#     try:
+#         curs.execute(q)
+#         conn.commit()
+#     finally:
+#         conn.close()
+#     d = {
+#         "train_number":train_number,
+#         "train_name": station_codes[0][-1],
+#         "from_station_code": station_codes[0][0],
+#         "from_station_name":station_codes[0][2],
+#         "to_station_code": station_codes[0][1],
+#         "to_station_name": station_codes[0][3],
+#         "ticket_class": ticket_class,
+#         "date": departure_date,
+#         "passenger_name": passenger_name,
+#         "passenger_email": passenger_email,
+#     }
+#     return d
 # book_ticket(12028,"3A","2022-12-01","Evalu Ator","evalu@ator.dev")
 def helper_train_name(train_number):
     query = f"SELECT name FROM train WHERE number = '{train_number}'"
