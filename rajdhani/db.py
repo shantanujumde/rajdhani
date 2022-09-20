@@ -198,6 +198,3 @@ def get_trips(email):
     # made by user with `email`
 
     return placeholders.TRIPS
-
-col, rows = exec_query(f"select * from booking ")
-print(col, rows)
