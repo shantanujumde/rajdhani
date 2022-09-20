@@ -158,20 +158,33 @@ def get_schedule(train_number):
         sch.append(d)
     
     return sch
-# def exec_insert_query(q, params, commit=False):
-#     conn = sqlite3.connect("trains.db")
-#     curs = conn.cursor()
-#     try:
-#         curs.execute(q, params)
-#         if commit:
-#                 conn.commit()
-#     finally:
-#         conn.close()
+def exec_insert_query(q, params, commit=False):
+    conn = sqlite3.connect("trains.db")
+    curs = conn.cursor()
+    try:
+        curs.execute(q, params)
+        if commit:
+                conn.commit()
+    finally:
+        conn.close()
 
-#     return curs.lastrowid
+    return curs.lastrowid
+def get_trip(booking_id):
+    query = f"SELECT * FROM booking WHERE id = {booking_id}"
+    booking = db_ops.exec_query(query)
+    return {booking[0][i]: booking[1][0][i] for i in range(8)}
+def get_from_and_to_of_train(number):
+    query = f"SELECT from_station_code, to_station_code FROM train WHERE number = '{number}'"
+    _, train_info = db_ops.exec_query(query)
+    return train_info[0]
 def book_ticket(train_number, ticket_class, departure_date, 
                 passenger_name, passenger_email):
-    
+    from_station_code, to_station_code = get_from_and_to_of_train(train_number)
+    query = "INSERT INTO booking (train_number, ticket_class, date, passenger_name, passenger_email, from_station_code, to_station_code) VALUES(?, ?, ?, ?, ?, ?, ?)"
+    params = (train_number, ticket_class, departure_date, passenger_name, passenger_email, from_station_code, to_station_code)
+    booking_id = db_ops.exec_insert_query(query, params, True)
+    booking = get_trip(booking_id)
+    return booking
     t = train_table
     sa = select([ t.c.from_station_code ,
                 t.c.to_station_code ,
