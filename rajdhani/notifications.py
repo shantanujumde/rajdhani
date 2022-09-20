@@ -2,32 +2,34 @@
 """
 from . import config
 import smtplib
+from email.message import EmailMessage
+
 def send_booking_confirmation_email(booking):
     """Sends a confirmation email on successful booking.
     The argument `booking` is a row in the database that contains the following fields:
         id, name, email, train_number, train_name, ticket_class, date
     """
     # The smtp configuration is available in the config module
-    print(booking)
-    sender = 'from@fromdomain.com'
-    receivers = [booking["passenger_email"]]
-
-    message = f"""From: From Person <from@fromdomain.com>
-                To: To Person <{receivers[0]}>
-                Subject: Your booking is successful
-
-                your booking from  {booking["from_station_name"]} to {booking["to_station_name"]}
-                is successfull
-
-                Thankyou!!
-                """
-    print(config.smtp_hostname)
+    email = EmailMessage()
+    email['Subject'] = 'Your Booking Successful!'
+    email['From'] = 'Shantanu Jumde <shantanujumde@rajdhani.pipal.in>'
+    email['To'] = f'{booking["passenger_name"]} <{booking["passenger_email"]}>'
+    email.set_content(f"""Dear {booking["passenger_name"]},
+    Your ticket booking is successful
+    
+    Team Rajdhani
+    """)
+    smtpObj = smtplib.SMTP(f'{config.smtp_hostname[0]}:{config.smtp_port[0]}')
     try:
-        smtpObj = smtplib.SMTP(config.smtp_hostname[0]+":"+config.smtp_port[0])
-        smtpObj.sendmail(sender, receivers, message)         
-        print ("Successfully sent email")
+        if config.smtp_username[0]:
+            smtpObj.starttls()
+            smtpObj.login(config.smtp_username[0], config.smtp_password[0])
+        smtpObj.send_message(email)
+        print("Email Send Success")
     except Exception as e:
         print ("Error: unable to send email",e)
+    finally:
+        smtpObj.quit()
     
 
 send_booking_confirmation_email({
