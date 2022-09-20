@@ -156,16 +156,32 @@ def get_schedule(train_number):
         sch.append(d)
     
     return sch
-(get_schedule("12028"))
+# (get_schedule("12028"))
 
-def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
+def book_ticket(train_number, ticket_class, departure_date, 
+                passenger_name, passenger_email):
     """Book a ticket for passenger
     """
     # TODO: make a db query and insert a new booking
-    # into the booking table
+    # into the booking table\
+    q = (f"insert into booking ( train_number ,\
+    passenger_name ,\
+    passenger_email ,\
+    ticket_class ,\
+    date ) \
+        values ({int(train_number)},'{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
+    # q = f"select * from booking "#where train_number ='{train_number}'"
+    conn = sqlite3.connect("trains.db")
+    curs = conn.cursor()
 
+    try:
+        curs.execute(q)
+        rows = curs.fetchall()
+    finally:
+        conn.close()
+    print("book ticket",rows)
     return placeholders.TRIPS[0]
-
+book_ticket("12628","3A","2022-12-01","Evalu Ator1","evalu@ator.dev")
 def get_trips(email):
     """Returns the bookings made by the user
     """
