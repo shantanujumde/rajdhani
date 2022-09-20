@@ -159,14 +159,17 @@ def get_schedule(train_number):
 
 def book_ticket(train_number, ticket_class, departure_date, 
                 passenger_name, passenger_email):
-    """Book a ticket for passenger
-    """
-    # TODO: make a db query and insert a new booking
-    # into the booking table\
+    
+    t = train_table
+    sa = select([ t.c.from_station_code ,
+                t.c.to_station_code ,
+                ]).where(t.c.number == int(train_number))
+    station_codes = (list(sa.execute())[0])
+   
     q = (f"insert into booking \
-    ( train_number , passenger_name , passenger_email ,ticket_class , date ) \
+    ( train_number , passenger_name , passenger_email ,ticket_class ,date,from_station_code , to_station_code ) \
         values \
-    ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
+    ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}','{station_codes[0]}','{station_codes[1]}')")
     conn = sqlite3.connect("trains.db")
     curs = conn.cursor()
 
@@ -190,7 +193,7 @@ def book_ticket(train_number, ticket_class, departure_date,
         "passenger_email": "tourist@example.com",
     }
     return placeholders.TRIPS[0]
-# book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
+book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
 def get_trips(email):
     """Returns the bookings made by the user
     """
