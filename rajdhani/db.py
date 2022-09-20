@@ -164,22 +164,32 @@ def book_ticket(train_number, ticket_class, departure_date,
     """
     # TODO: make a db query and insert a new booking
     # into the booking table\
-    q = (f"insert into booking ( train_number ,\
-    passenger_name ,\
-    passenger_email ,\
-    ticket_class ,\
-    date ) \
-        values ({int(train_number)},'{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
-    # q = f"select * from booking "#where train_number ='{train_number}'"
+    q = (f"insert into booking \
+    (id, train_number , passenger_name , passenger_email ,ticket_class , date ) \
+        values \
+    ({123},{int(train_number)},'{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
     conn = sqlite3.connect("trains.db")
     curs = conn.cursor()
 
     try:
         curs.execute(q)
-        rows = curs.fetchall()
+        conn.commit()
+        rows = curs.fetchall()    
+        print("book ticket",rows)
     finally:
         conn.close()
-    print("book ticket",rows)
+    d = {
+        "train_number": "12608",
+        "train_name": "Lalbagh Exp",
+        "from_station_code": "SBC",
+        "from_station_name": "Bangalore",
+        "to_station_code": "MAS",
+        "to_station_name": "Chennai",
+        "ticket_class": "3A",
+        "date": "2022-09-22",
+        "passenger_name": "Tourist",
+        "passenger_email": "tourist@example.com",
+    }
     return placeholders.TRIPS[0]
 book_ticket("12628","3A","2022-12-01","Evalu Ator1","evalu@ator.dev")
 def get_trips(email):
@@ -189,3 +199,6 @@ def get_trips(email):
     # made by user with `email`
 
     return placeholders.TRIPS
+
+col, rows = exec_query(f"select * from booking ")
+print(col, rows)
