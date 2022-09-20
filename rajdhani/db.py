@@ -5,7 +5,7 @@ import sqlite3
 from traceback import print_tb
 from . import placeholders
 from . import db_ops
-
+import random
 db_ops.ensure_db()
 from sqlalchemy import create_engine, MetaData, Table,select
 engine = create_engine("sqlite:///trains.db", echo=True)
@@ -166,7 +166,7 @@ def book_ticket(train_number, ticket_class, departure_date,
     q = (f"insert into booking \
     (id, train_number , passenger_name , passenger_email ,ticket_class , date ) \
         values \
-    ({123},{int(train_number)},'{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
+    ({int(random.random()*100)},'{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
     conn = sqlite3.connect("trains.db")
     curs = conn.cursor()
 
