@@ -1,4 +1,5 @@
 import os
+from re import T
 
 secret_key = os.getenv("SECRET_KEY", "helloworld")
 
@@ -10,7 +11,7 @@ flag_show_schedule_link = True
 flag_ticketclass_in_search = True
 flag_search_filters = True
 flag_login = False
-flag_bookings = False
+flag_bookings = True
 
 ## Database configurations
 ## Note: Please do not modify these
