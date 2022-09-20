@@ -243,42 +243,71 @@ def helper_fromto_station_names(from_station_code, to_station_code):
     return get_station_name(from_station_code), get_station_name(to_station_code)
 
 
+# def get_trips(email):
+#     """Returns the bookings made by the user
+#     """
+#     # TODO: make a db query and get the bookings
+#     # made by user with `email`
+#     query = f"SELECT * FROM booking WHERE passenger_email = '{email}'"
+#     b = booking_table
+#     sa = select([   b.c.id ,
+#                     b.c.train_number,
+#                     b.c.from_station_code ,
+#                     b.c.to_station_code ,
+#                     b.c.passenger_name ,
+#                     b.c.passenger_email ,
+#                     b.c.ticket_class ,
+#                     b.c.date 
+#                 ]).where(b.c.passenger_email == email)
+#     bookings = (list(sa.execute()))
+#     trips = db_ops.exec_query(query)
+    
+#     res = []
+#     for booking in bookings:
+#         from_station_name, to_station_name = helper_fromto_station_names(booking[2], booking[3])
+
+#         helper_fromto_station_names(booking[2], booking[3])
+#         d = {
+#             "train_number": booking[1],
+#             "train_name": helper_train_name(booking[1]),
+#             "from_station_code": booking[2],
+#             "from_station_name":from_station_name ,
+#             "to_station_code": booking[3],
+#             "to_station_name": to_station_name,
+#             "ticket_class": booking[6],
+#             "date": booking[7],
+#             "passenger_name": booking[4],
+#             "passenger_email": booking[5],
+#         }
+#         res.append(d)
+#     return res
+# print(get_trips("evaluator@example.com"))
+def get_train_name(train_number):
+    query = f"SELECT name FROM train WHERE number = '{train_number}'"
+    name = db_ops.exec_query(query)
+    return name[1][0][0]
+
+def get_station_name(code):
+    query = f"SELECT name FROM station WHERE code = '{code}'"
+    name = db_ops.exec_query(query)
+    return name[1][0][0]
+
+def get_from_to_station_names(from_station_code, to_station_code):
+    return get_station_name(from_station_code), get_station_name(to_station_code)
 def get_trips(email):
     """Returns the bookings made by the user
     """
-    # TODO: make a db query and get the bookings
-    # made by user with `email`
     query = f"SELECT * FROM booking WHERE passenger_email = '{email}'"
-    b = booking_table
-    sa = select([   b.c.id ,
-                    b.c.train_number,
-                    b.c.from_station_code ,
-                    b.c.to_station_code ,
-                    b.c.passenger_name ,
-                    b.c.passenger_email ,
-                    b.c.ticket_class ,
-                    b.c.date 
-                ]).where(b.c.passenger_email == email)
-    bookings = (list(sa.execute()))
     trips = db_ops.exec_query(query)
-    
-    res = []
-    for booking in bookings:
-        from_station_name, to_station_name = helper_fromto_station_names(booking[2], booking[3])
+    response = []
 
-        helper_fromto_station_names(booking[2], booking[3])
-        d = {
-            "train_number": booking[1],
-            "train_name": helper_train_name(booking[1]),
-            "from_station_code": booking[2],
-            "from_station_name":from_station_name ,
-            "to_station_code": booking[3],
-            "to_station_name": to_station_name,
-            "ticket_class": booking[6],
-            "date": booking[7],
-            "passenger_name": booking[4],
-            "passenger_email": booking[5],
-        }
-        res.append(d)
-    return res
-print(get_trips("evaluator@example.com"))
+    for trip in trips[1]:
+        trip_details = {trips[0][i]: trip[i] for i in range(8) if i != 0}
+        from_station_name, to_station_name = get_from_to_station_names(trip_details["from_station_code"], trip_details["to_station_code"])
+        train_name = get_train_name(trip_details["train_number"])
+        trip_details["train_name"] = train_name
+        trip_details["from_station_name"] = from_station_name
+        trip_details["to_station_name"] = to_station_name
+        response.append(trip_details)
+
+    return response
