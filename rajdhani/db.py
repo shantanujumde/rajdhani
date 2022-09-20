@@ -175,7 +175,13 @@ def get_from_and_to_of_train(number):
 def get_trip(booking_id):
     query = f"SELECT * FROM booking WHERE id = {booking_id}"
     booking = exec_query(query)
-    return {booking[0][i]: booking[1][0][i] for i in range(8)}
+    print("=>>",booking)
+    return  {'train_number': booking[0],
+     'ticket_class': booking[6],
+      'date': booking[-1], 'from_station_code': booking[2],
+       'to_station_code': booking[3], 'passenger_name': booking[4], 
+       'passenger_email': booking[5]
+       }
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger
@@ -231,14 +237,14 @@ def helper_train_name(train_number):
 def get_station_name(code):
     query = f"SELECT name FROM station WHERE code = '{code}'"
     name = exec_query(query)
-    print("=>>",name)
+    # print("=>>",name)
     try:
         return name[1][0][0]
     except:
         return None
-print(get_station_name("NDLC"))
+# print(get_station_name("NDLC"))
 def helper_fromto_station_names(from_station_code, to_station_code):
-    print("=>>",from_station_code, to_station_code)
+    # print("=>>",from_station_code, to_station_code)
     return get_station_name(from_station_code), get_station_name(to_station_code)
 
 
