@@ -158,33 +158,20 @@ def get_schedule(train_number):
         sch.append(d)
     
     return sch
-def exec_insert_query(q, params, commit=False):
-    conn = sqlite3.connect("trains.db")
-    curs = conn.cursor()
-    try:
-        curs.execute(q, params)
-        if commit:
-                conn.commit()
-    finally:
-        conn.close()
+# def exec_insert_query(q, params, commit=False):
+#     conn = sqlite3.connect("trains.db")
+#     curs = conn.cursor()
+#     try:
+#         curs.execute(q, params)
+#         if commit:
+#                 conn.commit()
+#     finally:
+#         conn.close()
 
-    return curs.lastrowid
-def get_trip(booking_id):
-    query = f"SELECT * FROM booking WHERE id = {booking_id}"
-    booking = db_ops.exec_query(query)
-    return {booking[0][i]: booking[1][0][i] for i in range(8)}
-def get_from_and_to_of_train(number):
-    query = f"SELECT from_station_code, to_station_code FROM train WHERE number = '{number}'"
-    _, train_info = db_ops.exec_query(query)
-    return train_info[0]
+#     return curs.lastrowid
 def book_ticket(train_number, ticket_class, departure_date, 
                 passenger_name, passenger_email):
-    from_station_code, to_station_code = get_from_and_to_of_train(train_number)
-    query = "INSERT INTO booking (train_number, ticket_class, date, passenger_name, passenger_email, from_station_code, to_station_code) VALUES(?, ?, ?, ?, ?, ?, ?)"
-    params = (train_number, ticket_class, departure_date, passenger_name, passenger_email, from_station_code, to_station_code)
-    booking_id = exec_insert_query(query, params, True)
-    booking = get_trip(booking_id)
-    return booking
+    
     t = train_table
     sa = select([ t.c.from_station_code ,
                 t.c.to_station_code ,
@@ -204,7 +191,6 @@ def book_ticket(train_number, ticket_class, departure_date,
     try:
         curs.execute(q)
         conn.commit()
-        rows = curs.fetchall()    
     finally:
         conn.close()
     d = {
@@ -231,7 +217,7 @@ def get_station_name(code):
     return name[1][0][0]
 
 def helper_fromto_station_names(from_station_code, to_station_code):
-    return [get_station_name(from_station_code), get_station_name(to_station_code)]
+    return get_station_name(from_station_code), get_station_name(to_station_code)
 
 
 def get_trips(email):
@@ -255,13 +241,16 @@ def get_trips(email):
     print(bookings, trips)
     res = []
     for booking in bookings:
+        from_station_name, to_station_name = helper_fromto_station_names(booking[2], booking[2])
+
+        helper_fromto_station_names(booking[2], booking[3])
         d = {
             "train_number": booking[1],
             "train_name": helper_train_name(booking[1]),
             "from_station_code": booking[2],
-            "from_station_name": helper_fromto_station_names(booking[2], booking[3])[0],
+            "from_station_name":from_station_name ,
             "to_station_code": booking[3],
-            "to_station_name": helper_fromto_station_names(booking[2], booking[3])[1],
+            "to_station_name": to_station_name,
             "ticket_class": booking[6],
             "date": booking[7],
             "passenger_name": booking[4],
