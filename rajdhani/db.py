@@ -40,7 +40,7 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    col, rows = exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
+    col, rows = exec_query(f"SELECT * FROM station WHERE code = '{q.upper()}' OR name LIKE '%{q}%' ;")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
     ans = []
@@ -74,10 +74,10 @@ def search_trains(
 
     # TODO: make a db query to get the matching trains
     # and replace the following dummy implementation
-    col, rows = exec_query(f"select * from train \
-        where from_station_code like \
-        '%{from_station_code}%' and \
-        to_station_code like '%{to_station_code}%'\
+    col, rows = exec_query(f"SELECT * FROM train \
+        WHERE from_station_code LIKE \
+        '%{from_station_code}%' AND \
+        to_station_code LIKE '%{to_station_code}%'\
                 ;")
     filter1 = []
     for val in rows:
@@ -139,8 +139,8 @@ def get_schedule(train_number):
     'chair_car'] 
     =>['code', 'name', 'zone', 'state', 'address', 'latitude', 'longitude']
     """
-    col, rows = exec_query(f"select * from schedule \
-         where train_number = '{int(train_number)}';")
+    col, rows = exec_query(f"SELECT * FROM schedule \
+         WHERE train_number = '{int(train_number)}';")
     s = schedule_table
     sa = select([ s.c.station_code ,
                 s.c.station_name ,
@@ -171,9 +171,9 @@ def book_ticket(train_number, ticket_class, departure_date,
                 ]).where(t.c.number == int(train_number))
     station_codes = (list(sa.execute())[0])
    
-    q = (f"insert into booking \
+    q = (f"INSERT INTO booking \
     ( train_number , passenger_name , passenger_email ,ticket_class ,date,from_station_code , to_station_code ) \
-        values \
+        VALUES \
     ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}','{station_codes[0]}','{station_codes[1]}')")
     conn = sqlite3.connect("trains.db")
     curs = conn.cursor()
@@ -199,7 +199,7 @@ def book_ticket(train_number, ticket_class, departure_date,
     }
     return d
 book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
-def get_train_name(train_number):
+def helper_train_name(train_number):
     query = f"SELECT name FROM train WHERE number = '{train_number}'"
     name = db_ops.exec_query(query)
     return name[1][0][0]
@@ -208,7 +208,7 @@ def get_station_name(code):
     name = db_ops.exec_query(query)
     return name[1][0][0]
 
-def get_from_to_station_names(from_station_code, to_station_code):
+def helper_fromto_station_names(from_station_code, to_station_code):
     return [get_station_name(from_station_code), get_station_name(to_station_code)]
 
 
@@ -235,11 +235,11 @@ def get_trips(email):
     for booking in bookings:
         d = {
             "train_number": booking[1],
-            "train_name": get_train_name(booking[1]),
+            "train_name": helper_train_name(booking[1]),
             "from_station_code": booking[2],
-            "from_station_name": get_from_to_station_names(booking[2], booking[3])[0],
+            "from_station_name": helper_fromto_station_names(booking[2], booking[3])[0],
             "to_station_code": booking[3],
-            "to_station_name": get_from_to_station_names(booking[2], booking[3])[1],
+            "to_station_name": helper_fromto_station_names(booking[2], booking[3])[1],
             "ticket_class": booking[6],
             "date": booking[7],
             "passenger_name": booking[4],
