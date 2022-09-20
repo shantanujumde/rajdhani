@@ -12,16 +12,33 @@ def send_booking_confirmation_email(booking):
     sender = 'from@fromdomain.com'
     receivers = [booking["passenger_email"]]
 
-    message = """From: From Person <from@fromdomain.com>
-                To: To Person <to@todomain.com>
-                Subject: SMTP e-mail test
+    message = f"""From: From Person <from@fromdomain.com>
+                To: To Person <{receivers[0]}>
+                Subject: Your booking is successful
 
-                This is a test e-mail message.
+                your booking from  {booking["from_station_name"]} to {booking["to_station_name"]}
+                is successfull
+
+                Thankyou!!
                 """
+    print(config.smtp_hostname)
     try:
-        smtpObj = smtplib.SMTP(config.smtp_hostname+":"+config.smtp_port)
+        smtpObj = smtplib.SMTP(config.smtp_hostname[0]+":"+config.smtp_port[0])
         smtpObj.sendmail(sender, receivers, message)         
         print ("Successfully sent email")
     except Exception as e:
-        print ("Error: unable to send email")
+        print ("Error: unable to send email",e)
     
+
+send_booking_confirmation_email({
+        "train_number": "12608",
+        "train_name": "Lalbagh Exp",
+        "from_station_code": "SBC",
+        "from_station_name": "Bangalore",
+        "to_station_code": "MAS",
+        "to_station_name": "Chennai",
+        "ticket_class": "3A",
+        "date": "2022-09-22",
+        "passenger_name": "Tourist",
+        "passenger_email": "shantanu.jumde@travelopia.com",
+    })
