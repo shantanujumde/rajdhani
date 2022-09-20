@@ -167,7 +167,6 @@ def exec_insert_query(q, params, commit=False):
                 conn.commit()
     finally:
         conn.close()
-
     return curs.lastrowid
 def get_from_and_to_of_train(number):
     query = f"SELECT from_station_code, to_station_code FROM train WHERE number = '{number}'"
