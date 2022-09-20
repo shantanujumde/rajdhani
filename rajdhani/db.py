@@ -295,12 +295,14 @@ def get_train_name(train_number):
 def get_station_name(code):
     query = f"SELECT name FROM station WHERE code = '{code}'"
     name = exec_query(query)
-    print(code, name)
+    # print(code, name)
     
     try:
         return name[1][0][0]
     except:
-        return 
+        pass
+        # query = f"DELETE FROM booking WHERE from_station_code = 'None' or to_station_code = 'None'"
+        # name = exec_query(query)
 
 def get_from_to_station_names(from_station_code, to_station_code):
     return get_station_name(from_station_code), get_station_name(to_station_code)
@@ -310,9 +312,10 @@ def get_trips(email):
     query = f"SELECT * FROM booking WHERE passenger_email = '{email}'"
     trips = exec_query(query)
     response = []
-
+    print(trips)
     for trip in trips[1]:
         trip_details = {trips[0][i]: trip[i] for i in range(8) if i != 0}
+        # print(trip_details)
         from_station_name, to_station_name = get_from_to_station_names(trip_details["from_station_code"], trip_details["to_station_code"])
         train_name = get_train_name(trip_details["train_number"])
         trip_details["train_name"] = train_name
