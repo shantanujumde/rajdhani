@@ -164,9 +164,9 @@ def book_ticket(train_number, ticket_class, departure_date,
     # TODO: make a db query and insert a new booking
     # into the booking table\
     q = (f"insert into booking \
-    (id, train_number , passenger_name , passenger_email ,ticket_class , date ) \
+    ( train_number , passenger_name , passenger_email ,ticket_class , date ) \
         values \
-    ({int(random.random()*100)},'{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
+    ('{train_number}','{passenger_name}','{passenger_email}','{ticket_class}','{departure_date}')")
     conn = sqlite3.connect("trains.db")
     curs = conn.cursor()
 
