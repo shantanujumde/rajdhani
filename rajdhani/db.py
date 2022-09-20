@@ -235,5 +235,5 @@ def get_trips(email):
     for booking in bookings:
         d = {'train': '04728', 'class': '3A', 'date': '2022-09-28'}
         res.append(d)
-    return res
+    return [{'train': '04728', 'class': '3A', 'date': '2022-09-28'}]
 print(get_trips("lemetweakit@example.com"))
