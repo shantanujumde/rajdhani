@@ -163,6 +163,9 @@ def book_ticket(train_number, ticket_class, departure_date,
     t = train_table
     sa = select([ t.c.from_station_code ,
                 t.c.to_station_code ,
+                t.c.from_station_name,
+                t.c.to_station_name,
+                t.c.name
                 ]).where(t.c.number == int(train_number))
     station_codes = (list(sa.execute())[0])
    
@@ -181,23 +184,27 @@ def book_ticket(train_number, ticket_class, departure_date,
         conn.close()
     print("book ticket",rows)
     d = {
-        "train_number": "12608",
-        "train_name": "Lalbagh Exp",
-        "from_station_code": "SBC",
-        "from_station_name": "Bangalore",
-        "to_station_code": "MAS",
-        "to_station_name": "Chennai",
-        "ticket_class": "3A",
-        "date": "2022-09-22",
-        "passenger_name": "Tourist",
-        "passenger_email": "tourist@example.com",
+        "train_number":train_number,
+        "train_name": station_codes[-1],
+        "from_station_code": station_codes[0],
+        "from_station_name":station_codes[2],
+        "to_station_code": station_codes[1],
+        "to_station_name": station_codes[3],
+        "ticket_class": ticket_class,
+        "date": departure_date,
+        "passenger_name": passenger_name,
+        "passenger_email": passenger_email,
     }
-    return placeholders.TRIPS[0]
+    return d
 book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
+
+
 def get_trips(email):
     """Returns the bookings made by the user
     """
     # TODO: make a db query and get the bookings
     # made by user with `email`
+    
+   
 
     return placeholders.TRIPS
