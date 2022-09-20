@@ -38,7 +38,7 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    col, rows = exec_query(f"select * from station where code = '{q.upper()}' or name = '{q.upper()}' ;")
+    col, rows = exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
     ans = []
@@ -174,9 +174,9 @@ def book_ticket(train_number, ticket_class, departure_date,
         curs.execute(q)
         conn.commit()
         rows = curs.fetchall()    
-        print("book ticket",rows)
     finally:
         conn.close()
+    print("book ticket",rows)
     d = {
         "train_number": "12608",
         "train_name": "Lalbagh Exp",
