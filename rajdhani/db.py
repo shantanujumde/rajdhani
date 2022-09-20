@@ -182,7 +182,7 @@ def book_ticket(train_number, ticket_class, departure_date,
     from_station_code, to_station_code = get_from_and_to_of_train(train_number)
     query = "INSERT INTO booking (train_number, ticket_class, date, passenger_name, passenger_email, from_station_code, to_station_code) VALUES(?, ?, ?, ?, ?, ?, ?)"
     params = (train_number, ticket_class, departure_date, passenger_name, passenger_email, from_station_code, to_station_code)
-    booking_id = db_ops.exec_insert_query(query, params, True)
+    booking_id = exec_insert_query(query, params, True)
     booking = get_trip(booking_id)
     return booking
     t = train_table
