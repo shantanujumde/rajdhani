@@ -34,15 +34,15 @@ def send_booking_confirmation_email(booking):
         smtpObj.quit()
     
 
-send_booking_confirmation_email({
-        "train_number": "12608",
-        "train_name": "Lalbagh Exp",
-        "from_station_code": "SBC",
-        "from_station_name": "Bangalore",
-        "to_station_code": "MAS",
-        "to_station_name": "Chennai",
-        "ticket_class": "3A",
-        "date": "2022-09-22",
-        "passenger_name": "Tourist",
-        "passenger_email": "shantanu.jumde@travelopia.com",
-    })
+# send_booking_confirmation_email({
+#         "train_number": "12608",
+#         "train_name": "Lalbagh Exp",
+#         "from_station_code": "SBC",
+#         "from_station_name": "Bangalore",
+#         "to_station_code": "MAS",
+#         "to_station_name": "Chennai",
+#         "ticket_class": "3A",
+#         "date": "2022-09-22",
+#         "passenger_name": "Tourist",
+#         "passenger_email": "shantanu.jumde@travelopia.com",
+#     })
