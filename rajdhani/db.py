@@ -141,12 +141,12 @@ def get_schedule(train_number):
          where train_number = '{int(train_number)}';")
     s = schedule_table
     sa = select([ s.c.station_code ,
-    s.c.station_name ,
-    s.c.train_number ,
-    s.c.train_name ,
-    s.c.day ,
-    s.c.arrival ,
-    s.c.departure ]).where(s.c.train_number == int(train_number))
+                s.c.station_name ,
+                s.c.train_number ,
+                s.c.train_name ,
+                s.c.day ,
+                s.c.arrival ,
+                s.c.departure ]).where(s.c.train_number == int(train_number))
     rows = (list(sa.execute()))
     # print((rows[0:10]))
     sch = []
