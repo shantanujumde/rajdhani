@@ -295,7 +295,12 @@ def get_train_name(train_number):
 def get_station_name(code):
     query = f"SELECT name FROM station WHERE code = '{code}'"
     name = exec_query(query)
-    return name[1][0][0]
+    print(code, name)
+    
+    try:
+        return name[1][0][0]
+    except:
+        return 
 
 def get_from_to_station_names(from_station_code, to_station_code):
     return get_station_name(from_station_code), get_station_name(to_station_code)
@@ -314,5 +319,5 @@ def get_trips(email):
         trip_details["from_station_name"] = from_station_name
         trip_details["to_station_name"] = to_station_name
         response.append(trip_details)
-
-    return {'train': '04728', 'class': '3A', 'date': '2022-09-28'}
+    print(response[0])
+    return response
