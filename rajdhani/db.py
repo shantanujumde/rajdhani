@@ -229,7 +229,7 @@ def book_ticket(train_number, ticket_class, departure_date,
         "passenger_email": passenger_email,
     }
     return d
-book_ticket(12028,"3A","2022-12-01","Evalu Ator","evalu@ator.dev")
+# book_ticket(12028,"3A","2022-12-01","Evalu Ator","evalu@ator.dev")
 def helper_train_name(train_number):
     query = f"SELECT name FROM train WHERE number = '{train_number}'"
     name = exec_query(query)
