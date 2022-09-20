@@ -1,6 +1,7 @@
 """
 Module to interact with the database.
 """
+import re
 import sqlite3
 from traceback import print_tb
 from . import placeholders
@@ -13,6 +14,7 @@ meta = MetaData(bind=engine)
 train_table = Table("train", meta, autoload=True)
 station_table = Table("station", meta, autoload=True)
 schedule_table = Table("schedule", meta, autoload=True)
+booking_table = Table("booking", meta, autoload=True)
 
 def exec_query(q, commit=False):
     conn = sqlite3.connect("trains.db")
@@ -197,6 +199,17 @@ def book_ticket(train_number, ticket_class, departure_date,
     }
     return d
 book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
+def get_train_name(train_number):
+    query = f"SELECT name FROM train WHERE number = '{train_number}'"
+    name = db_ops.exec_query(query)
+    return name[1][0][0]
+def get_station_name(code):
+    query = f"SELECT name FROM station WHERE code = '{code}'"
+    name = db_ops.exec_query(query)
+    return name[1][0][0]
+
+def get_from_to_station_names(from_station_code, to_station_code):
+    return get_station_name(from_station_code), get_station_name(to_station_code)
 
 
 def get_trips(email):
@@ -204,7 +217,33 @@ def get_trips(email):
     """
     # TODO: make a db query and get the bookings
     # made by user with `email`
-    
-   
+    query = f"SELECT * FROM booking WHERE passenger_email = '{email}'"
+    b = booking_table
+    sa = select([   b.c.id ,
+                    b.c.train_number,
+                    b.c.from_station_code ,
+                    b.c.to_station_code ,
+                    b.c.passenger_name ,
+                    b.c.passenger_email ,
+                    b.c.ticket_class ,
+                    b.c.date 
+                ]).where(b.c.passenger_email == email)
+    result = (list(sa.execute()))
+    # trips = db_ops.exec_query(query)
+    print(result)
+    res = []
+
+    for trip in result:
+        trip_details = {result[i]: trip[i] for i in range(8) if i != 0}
+        from_station_name, to_station_name = get_from_to_station_names(trip_details["from_station_code"], trip_details["to_station_code"])
+        train_name = get_train_name(trip_details["train_number"])
+        trip_details["train_name"] = train_name
+        trip_details["from_station_name"] = from_station_name
+        trip_details["to_station_name"] = to_station_name
+        res.append(trip_details)
+
+    # return 
+
 
     return placeholders.TRIPS
+get_trips("evaluator@example.com")
