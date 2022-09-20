@@ -147,13 +147,7 @@ def book_ticket_page():
         ticket_class = request.args.get("class")
         date = request.args.get("date")
 
-    booking = db.book_ticket(
-                train_number=request.args.get("train"),
-                ticket_class=request.args.get("class"),
-                departure_date=request.args.get("departure_date"),               
-                passenger_name=request.args.get("passenger_name"),
-                passenger_email=email)
-    notifications.send_booking_confirmation_email(booking)
+   
     return render_template("book_ticket.html",
                            train_number=train_number,
                            ticket_class=ticket_class,

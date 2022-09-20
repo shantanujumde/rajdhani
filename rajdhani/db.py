@@ -158,7 +158,17 @@ def get_schedule(train_number):
         sch.append(d)
     
     return sch
+# def exec_insert_query(q, params, commit=False):
+#     conn = sqlite3.connect("trains.db")
+#     curs = conn.cursor()
+#     try:
+#         curs.execute(q, params)
+#         if commit:
+#                 conn.commit()
+#     finally:
+#         conn.close()
 
+#     return curs.lastrowid
 def book_ticket(train_number, ticket_class, departure_date, 
                 passenger_name, passenger_email):
     
