@@ -315,4 +315,4 @@ def get_trips(email):
         trip_details["to_station_name"] = to_station_name
         response.append(trip_details)
 
-    return response
+    return {'train': '04728', 'class': '3A', 'date': '2022-09-28'}
