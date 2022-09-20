@@ -38,7 +38,7 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    col, rows = exec_query(f"select * from station where code = '{q.upper()}' or name like '%{q}%' ;")
+    col, rows = exec_query(f"select * from station where code = '{q.upper()}' or name = '{q.upper()}' ;")
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
     ans = []
