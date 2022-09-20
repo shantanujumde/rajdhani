@@ -6,41 +6,27 @@ from email.message import EmailMessage
 
 def send_booking_confirmation_email(booking):
     """Sends a confirmation email on successful booking.
+
     The argument `booking` is a row in the database that contains the following fields:
+
         id, name, email, train_number, train_name, ticket_class, date
     """
-    # The smtp configuration is available in the config module
     email = EmailMessage()
-    email['Subject'] = 'Your Booking Successful!'
-    email['From'] = 'Shantanu Jumde <shantanujumde@rajdhani.pipal.in>'
+    email['Subject'] = 'Train Ticket Booking Successful!'
+    email['From'] = 'Ameen Ahsan <ameen@rajdhani.pipal.in>'
     email['To'] = f'{booking["passenger_name"]} <{booking["passenger_email"]}>'
-    email.set_content(f"""Dear {booking["passenger_name"]},
+    email.set_content(f"""Hello {booking["passenger_name"]},
     Your ticket booking is successful
-    
+
+    Yours very truly,
     Team Rajdhani
     """)
-    smtpObj = smtplib.SMTP(f'{config.smtp_hostname[0]}:{config.smtp_port[0]}')
+
+    smtp = smtplib.SMTP(f'{config.smtp_hostname[0]}:{config.smtp_port[0]}')
     try:
         if config.smtp_username[0]:
-            smtpObj.starttls()
-            smtpObj.login(config.smtp_username[0], config.smtp_password[0])
-        smtpObj.send_message(email)
-        print("Email Send Success")
-    except Exception as e:
-        print ("Error: unable to send email",e)
+            smtp.starttls()
+            smtp.login(config.smtp_username[0], config.smtp_password[0])
+        smtp.send_message(email)
     finally:
-        smtpObj.quit()
-    
-
-send_booking_confirmation_email({
-        "train_number": "12608",
-        "train_name": "Lalbagh Exp",
-        "from_station_code": "SBC",
-        "from_station_name": "Bangalore",
-        "to_station_code": "MAS",
-        "to_station_name": "Chennai",
-        "ticket_class": "3A",
-        "date": "2022-09-22",
-        "passenger_name": "Tourist",
-        "passenger_email": "shantanu.jumde@travelopia.com",
-    })
+        smtp.quit()
