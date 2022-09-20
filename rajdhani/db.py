@@ -245,5 +245,5 @@ def get_trips(email):
     # return 
 
 
-    return placeholders.TRIPS
+    return res
 get_trips("evaluator@example.com")
