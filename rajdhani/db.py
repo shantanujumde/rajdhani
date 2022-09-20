@@ -209,14 +209,18 @@ def book_ticket(train_number, ticket_class, departure_date,
 book_ticket("12628","3A","2022-12-01","Evalu Ator","evalu@ator.dev")
 def helper_train_name(train_number):
     query = f"SELECT name FROM train WHERE number = '{train_number}'"
-    name = db_ops.exec_query(query)
+    name = exec_query(query)
     return name[1][0][0]
 def get_station_name(code):
     query = f"SELECT name FROM station WHERE code = '{code}'"
-    name = db_ops.exec_query(query)
-    return name[1][0][0]
+    name = exec_query(query)
+    try:
+        return name[1][0][0]
+    except:
+        return None
 
 def helper_fromto_station_names(from_station_code, to_station_code):
+    print("=>>",from_station_code, to_station_code)
     return get_station_name(from_station_code), get_station_name(to_station_code)
 
 
@@ -238,10 +242,10 @@ def get_trips(email):
                 ]).where(b.c.passenger_email == email)
     bookings = (list(sa.execute()))
     trips = db_ops.exec_query(query)
-    print(bookings, trips)
+    
     res = []
     for booking in bookings:
-        from_station_name, to_station_name = helper_fromto_station_names(booking[2], booking[2])
+        from_station_name, to_station_name = helper_fromto_station_names(booking[2], booking[3])
 
         helper_fromto_station_names(booking[2], booking[3])
         d = {
