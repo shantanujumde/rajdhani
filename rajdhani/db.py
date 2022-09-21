@@ -201,7 +201,7 @@ def book_ticket(train_number, ticket_class, departure_date,
                 t.c.from_station_name,
                 t.c.to_station_name,
                 t.c.name
-                ]).where(t.c.number == int(train_number))
+                ]).where(t.c.number == str(train_number))
     station_codes = (list(sa.execute()))
     print("station_codes",station_codes)
     q = (f"INSERT INTO booking \
